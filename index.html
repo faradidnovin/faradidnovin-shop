@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>فروشگاه فرادیدنوین</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Tahoma,Arial,sans-serif;background:#f5f7fb;color:#172033}
+header{background:#111827;color:#fff;padding:22px 18px;position:sticky;top:0;z-index:5}
+.wrap{max-width:1100px;margin:auto}.brand{font-size:22px;font-weight:800}.sub{font-size:12px;opacity:.8;margin-top:6px}
+.search{margin-top:15px;width:100%;padding:13px;border:0;border-radius:12px;font-size:14px}
+nav{display:flex;gap:8px;overflow:auto;padding:12px 0}.chip{border:1px solid #d7dce5;background:#fff;border-radius:999px;padding:9px 14px;white-space:nowrap;cursor:pointer}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px;padding:15px 0 90px}
+.card{background:#fff;border:1px solid #e5e9f0;border-radius:18px;padding:16px;box-shadow:0 5px 20px #00000008}
+.tag{font-size:11px;background:#eef2ff;padding:5px 8px;border-radius:7px;display:inline-block}
+.card h3{font-size:16px;min-height:45px}.price{font-size:18px;font-weight:800;margin:12px 0}
+.btn{width:100%;border:0;background:#111827;color:#fff;padding:12px;border-radius:11px;cursor:pointer}
+.cart{position:fixed;left:18px;bottom:18px;background:#111827;color:#fff;border-radius:15px;padding:13px 18px;box-shadow:0 10px 30px #0004;cursor:pointer}
+.modal{position:fixed;inset:0;background:#0007;display:none;align-items:flex-end;z-index:10}.sheet{background:#fff;width:100%;max-width:650px;margin:auto;border-radius:22px 22px 0 0;padding:20px;max-height:85vh;overflow:auto}
+.row{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid #eee}.qty button{width:30px;height:30px;border:1px solid #ddd;background:#fff;border-radius:8px}.empty{text-align:center;padding:35px}
+.contact{font-size:12px;color:#667085;line-height:2;margin-top:20px}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+<div class="brand">فنی و مهندسی فرادیدنوین</div>
+<div class="sub">فروش تخصصی تجهیزات دوربین مداربسته و شبکه | قم</div>
+<input id="search" class="search" placeholder="🔎 جستجوی مدل یا نام کالا">
+</div></header>
+<main class="wrap">
+<nav>
+<button class="chip" onclick="filter('all')">همه</button>
+<button class="chip" onclick="filter('ip')">📷 دوربین IP</button>
+<button class="chip" onclick="filter('dvr')">🎥 DVR / XVR</button>
+<button class="chip" onclick="filter('nvr')">🖥️ NVR</button>
+</nav>
+<section id="grid" class="grid"></section>
+<div class="contact">📍 قم، بلوار روحانی، نبش کوچه ۵<br>☎️ 09127475945<br>نماینده رسمی NIA VISION در استان قم</div>
+</main>
+<button class="cart" onclick="openCart()">🛒 سبد خرید <span id="count">0</span></button>
+
+<div id="modal" class="modal" onclick="if(event.target===this)closeCart()">
+<div class="sheet"><h2>🛒 سبد خرید</h2><div id="cartItems"></div><div id="total"></div>
+<hr><p>برای ثبت سفارش، اطلاعات تماس خود را وارد کنید:</p>
+<input id="name" class="search" style="border:1px solid #ddd" placeholder="نام و نام خانوادگی">
+<input id="phone" class="search" style="border:1px solid #ddd" placeholder="شماره تماس">
+<button class="btn" style="margin-top:10px" onclick="submitOrder()">ثبت درخواست سفارش</button>
+<button class="btn" style="margin-top:8px;background:#eee;color:#111" onclick="closeCart()">بستن</button>
+</div></div>
+
+<script>
+let products=[], current='all', cart=JSON.parse(localStorage.getItem('fd_cart')||'{}');
+const toman=n=>new Intl.NumberFormat('fa-IR').format(n)+' تومان';
+fetch('products.json').then(r=>r.json()).then(x=>{products=x;render()});
+function filter(c){current=c;render()}
+function render(){
+ const q=(document.getElementById('search').value||'').trim().toLowerCase();
+ const list=products.filter(p=>(current==='all'||p.cat===current)&&(!q||p.name.toLowerCase().includes(q)||p.id.toLowerCase().includes(q)));
+ document.getElementById('grid').innerHTML=list.map(p=>`<article class="card"><span class="tag">Dahua</span><h3>${p.name}</h3><div class="price">${toman(p.sale_toman)}</div><button class="btn" onclick="add('${p.id}')">افزودن به سبد خرید</button></article>`).join('')||'<div class="empty">محصولی پیدا نشد.</div>';
+ updateCount();
+}
+document.getElementById('search').addEventListener('input',render);
+function add(id){cart[id]=(cart[id]||0)+1;save();render()}
+function save(){localStorage.setItem('fd_cart',JSON.stringify(cart));updateCount()}
+function updateCount(){document.getElementById('count').textContent=Object.values(cart).reduce((a,b)=>a+b,0)}
+function openCart(){
+ document.getElementById('modal').style.display='flex';let keys=Object.keys(cart);
+ document.getElementById('cartItems').innerHTML=keys.length?keys.map(id=>{let p=products.find(x=>x.id===id),n=cart[id];return `<div class="row"><div>${p.name}<br><b>${toman(p.sale_toman*n)}</b></div><div class="qty"><button onclick="change('${id}',-1)">−</button> ${n} <button onclick="change('${id}',1)">+</button></div></div>`}).join(''):'<div class="empty">سبد خرید خالی است.</div>';
+ let total=keys.reduce((s,id)=>s+products.find(x=>x.id===id).sale_toman*cart[id],0);
+ document.getElementById('total').innerHTML=keys.length?`<h3>جمع: ${toman(total)}</h3>`:'';
+}
+function change(id,d){cart[id]=(cart[id]||0)+d;if(cart[id]<=0)delete cart[id];save();openCart();render()}
+function closeCart(){document.getElementById('modal').style.display='none'}
+function submitOrder(){
+ if(!Object.keys(cart).length)return alert('سبد خرید خالی است.');
+ let name=document.getElementById('name').value.trim(),phone=document.getElementById('phone').value.trim();
+ if(!name||!phone)return alert('نام و شماره تماس را وارد کنید.');
+ let lines=Object.keys(cart).map(id=>{let p=products.find(x=>x.id===id);return `${p.id} × ${cart[id]}`}).join('\\n');
+ alert('درخواست سفارش ثبت شد.\\n\\n'+name+'\\n'+phone+'\\n'+lines+'\\n\\nاتصال نهایی به پنل/پرداخت بله در مرحله بک‌اند انجام می‌شود.');
+}
+</script>
+</body></html>

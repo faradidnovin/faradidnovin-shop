@@ -1,0 +1,65 @@
+[
+  {
+    "id": "NVR2104HC-W",
+    "name": "دستگاه NVR2104HC-W",
+    "cat": "nvr",
+    "source_toman": 20350000,
+    "sale_toman": 20700000
+  },
+  {
+    "id": "NVR2108HC-W",
+    "name": "دستگاه NVR2108HC-W",
+    "cat": "nvr",
+    "source_toman": 26359000,
+    "sale_toman": 26709000
+  },
+  {
+    "id": "SDT2A200-2F-NB-A-PV",
+    "name": "دوربین SDT2A200-2F-NB-A-PV",
+    "cat": "ip",
+    "source_toman": 14097000,
+    "sale_toman": 14447000
+  },
+  {
+    "id": "SD2A500NB-GNY-A-PV",
+    "name": "دوربین SD2A500NB-GNY-A-PV",
+    "cat": "ip",
+    "source_toman": 9597000,
+    "sale_toman": 9947000
+  },
+  {
+    "id": "IPC-C5A P",
+    "name": "دوربین IPC-C5A P پنج مگاپیکسل",
+    "cat": "ip",
+    "source_toman": 5159000,
+    "sale_toman": 5509000
+  },
+  {
+    "id": "DH-IPC-F2CP-LED",
+    "name": "دوربین DH-IPC-F2CP-LED",
+    "cat": "ip",
+    "source_toman": 7239000,
+    "sale_toman": 7589000
+  },
+  {
+    "id": "DH-IPC-F4CP-LED",
+    "name": "دوربین DH-IPC-F4CP-LED",
+    "cat": "ip",
+    "source_toman": 8197000,
+    "sale_toman": 8547000
+  },
+  {
+    "id": "DH-XVR1B16-I",
+    "name": "دستگاه DH-XVR1B16-I",
+    "cat": "dvr",
+    "source_toman": 14997000,
+    "sale_toman": 15347000
+  },
+  {
+    "id": "XVR4104HS-I",
+    "name": "دستگاه XVR4104HS-I",
+    "cat": "dvr",
+    "source_toman": 6728000,
+    "sale_toman": 7078000
+  }
+]
